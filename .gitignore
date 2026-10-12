@@ -1,0 +1,18 @@
+# 데이터/결과물은 git에 올리지 않음 (용량, AI Hub 재배포 금지)
+data/**
+!data/**/.gitkeep
+outputs/**
+!outputs/.gitkeep
+tools/aihubshell
+
+# 비밀 정보
+.env
+
+# 파이썬
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# 모델 가중치 (실행 시 자동 다운로드)
+*.pt
