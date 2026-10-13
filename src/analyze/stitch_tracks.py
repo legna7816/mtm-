@@ -9,6 +9,15 @@ MAX_DIST = 0.2    # 앞 조각 끝 ~ 뒤 조각 시작 최대 거리 (정규화 
 STATIC_SPEED = 0.002  # 프레임당 이동량이 이보다 작으면 정지 조각
 STATIC_DIST = 0.05    # 정지 조각 뒤에 이어붙일 수 있는 최대 거리
 
+def dist(p, q):
+    return math.hypot(p[0] - q[0], p[1] - q[1])
+
+def is_static(recs):
+    x0, y0 = recs[0]["pos"]
+    move = max(math.hypot(r["pos"][0] - x0, r["pos"][1] - y0) for r in recs)
+    span = recs[-1]["frame"] - recs[0]["frame"]
+    return span > 0 and move / span < STATIC_SPEED
+
 def run(out_dir="outputs"):
     in_path = os.path.join(out_dir, "tracks.json")
     out_path = os.path.join(out_dir, "tracks_stitched.json")
@@ -16,17 +25,6 @@ def run(out_dir="outputs"):
     with open(in_path, encoding="utf-8") as f:
         data = json.load(f)
     tracks = data["tracks"]
-
-    def dist(p, q):
-        return math.hypot(p[0] - q[0], p[1] - q[1])
-
-    def is_static(recs):
-        x0, y0 = recs[0]["pos"]
-        move = max(math.hypot(r["pos"][0] - x0, r["pos"][1] - y0) for r in recs)
-        span = recs[-1]["frame"] - recs[0]["frame"]
-        return span > 0 and move / span < STATIC_SPEED
-
-
     order = sorted(tracks, key=lambda tid: tracks[tid][0]["frame"])
 
     merged = {}    # 대표 ID -> 이어붙인 기록 목록
