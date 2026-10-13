@@ -6,7 +6,7 @@ from ultralytics import YOLO
 
 MODEL = "yolov8n.pt"
 VIDEO = "data/videos/sample.mp4"
-OUT = "outputs/tracked_c01_agn.mp4"
+OUT = "outputs/tracked.mp4"
 KEEP = [0, 1, 2, 3, 5, 7, 9]
 SCENE_THRESH = 6
 
@@ -38,7 +38,7 @@ while True:
 
     results = model.track(frame, persist=True, tracker="bytetrack.yaml",
                           conf=0.1, classes=KEEP, agnostic_nms=True,
-                          verbose=False)
+                          imgsz=1280, verbose=False)
     r = results[0]
 
     ids = []
